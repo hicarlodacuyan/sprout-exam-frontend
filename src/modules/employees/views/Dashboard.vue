@@ -1,17 +1,20 @@
 <template>
   <div>
     <h1>Employee Dashboard</h1>
-    <router-link to="/add-employee">Add Employee</router-link>
+    <div class="employees-container">
+      <router-link to="/add-employee" class="add-employee">Add Employee</router-link>
+      <div class="employee-list">
+        <ul>
+          <li v-for="employee in employees" :key="employee.id">
+            <EmployeeCard 
+              :employee="employee"
+              @delete="fetchEmployees"
+            />
+          </li>
+        </ul>
+      </div>
     <button @click="logoutEmployee">Logout</button>
-    <ul>
-      <li v-for="employee in employees" :key="employee.id">
-        <EmployeeCard 
-          :employee="employee"
-          @delete="fetchEmployees"
-        />
-      </li>
-    </ul>
-
+  </div>
   </div>
 </template>
 
@@ -42,3 +45,54 @@
   
   onMounted(fetchEmployees)
 </script>
+
+<style scoped>
+  div {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 1rem;
+  }
+
+  .employee-list {
+    flex: 1;
+
+    overflow-y: auto;
+  }
+
+  .add-employee {
+    padding: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+    text-decoration: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  button {
+    padding: 0.5rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+
+    align-self: flex-end;
+  }
+
+  @media (min-width: 768px) {
+    .employee-list ul {
+      display: flex;
+      gap: 1em;
+      flex-direction: row;
+    }
+  }
+</style>

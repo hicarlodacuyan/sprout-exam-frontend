@@ -14,9 +14,11 @@
       <p>Project: {{ employee.project }}</p>
     </div>
 
-    <button @click="viewEmployee">View</button>
-    <button @click="editEmployee">Edit</button>
-    <button @click="deleteEmployeeHandler">Delete</button>
+    <div class="action-btns">
+      <button @click="viewEmployee" class="view-btn">View</button>
+      <button @click="editEmployee" class="edit-btn">Edit</button>
+      <button @click="deleteEmployeeHandler" class="delete-btn">Delete</button>
+    </div>
   </div>
 </template>
 
@@ -65,6 +67,38 @@ const deleteEmployeeHandler = async () => {
   padding: 1em;
   border-radius: 8px;
   margin: 1em 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
+
+.action-btns {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+}
+
+button {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.view-btn {
+  background-color: #28a745;
+}
+
+.edit-btn {
+  background-color: #ffc107;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+}
+
 </style>
 

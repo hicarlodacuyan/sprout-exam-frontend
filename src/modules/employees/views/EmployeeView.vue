@@ -39,11 +39,19 @@
 </script>
 
 <style scoped>
-.employee-card {
-  border: 1px solid #ddd;
-  padding: 1em;
-  border-radius: 8px;
-  margin: 1em 0;
-}
+  /* make the div look like a card */
+  div {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    div {
+      width: 50%;
+      margin: 1rem auto;
+    }
+  }
 </style>
 

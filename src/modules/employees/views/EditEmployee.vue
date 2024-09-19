@@ -1,8 +1,7 @@
 <template>
-  <h2>Edit Employee</h2>
-
   <!-- Render form only when employee data is loaded -->
   <div v-if="employee">
+    <h1>Edit Employee</h1>
     <form @submit.prevent="onSubmit">
       <div>
         <label for="type_of_employee">Type of Employee:</label>
@@ -58,8 +57,7 @@
     try {
       const data = await getEmployee(employeeId)
       employee.value = data
-      console.log(data)
-      // Determine the type of employee based on the fields
+ 
       if (data.number_of_leaves !== undefined) {
         typeOfEmployee.value = 'regular'
       } else if (data.contract_end_date !== undefined) {
@@ -81,4 +79,49 @@
 
   onMounted(fetchEmployee)
 </script>
+
+<style scoped>
+  div {
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  input {
+    padding: 0.5rem;
+  }
+
+  select {
+    padding: 0.5rem;
+  }
+
+  button {
+    padding: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+    @media (min-width: 768px) {
+    form {
+      width: 50%;
+      margin: 0 auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    form {
+      width: 30%;
+    }
+  }
+</style>
 

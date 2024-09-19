@@ -1,4 +1,5 @@
 <template>
+  <div>
     <h2>Add Employee</h2>
     <form @submit.prevent="onSubmit">
       <div>
@@ -30,6 +31,7 @@
 
       <button type="submit">Add Employee</button>
     </form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -57,3 +59,48 @@
     }
   }
 </script>
+
+<style scoped>
+  div {
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  input {
+    padding: 0.5rem;
+  }
+
+  select {
+    padding: 0.5rem;
+  }
+
+  button {
+    padding: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+    @media (min-width: 768px) {
+    form {
+      width: 50%;
+      margin: 0 auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    form {
+      width: 30%;
+    }
+  }
+</style>
