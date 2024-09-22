@@ -1,18 +1,21 @@
 <template>
-  <div v-if="employee">
-    <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
-    <p>Email: {{ employee.email }}</p>
+  <Card v-if="employee" class="m-4">
+    <CardHeader>
+      <CardTitle>{{ employee.first_name }} {{ employee.last_name }}</CardTitle>
+      <CardDescription>Email: {{ employee.email }}</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div v-if="employee.number_of_leaves !== undefined">
+        <p>Number of Leaves: {{ employee.number_of_leaves }}</p>
+        <p>Benefits: {{ employee.benefits }}</p>
+      </div>
 
-    <div v-if="employee.number_of_leaves !== undefined">
-      <p>Number of Leaves: {{ employee.number_of_leaves }}</p>
-      <p>Benefits: {{ employee.benefits }}</p>
-    </div>
-
-    <div v-if="employee.contract_end_date !== undefined">
-      <p>Contract End Date: {{ employee.contract_end_date }}</p>
-      <p>Project: {{ employee.project }}</p>
-    </div>
-  </div>
+      <div v-if="employee.contract_end_date !== undefined">
+        <p>Contract End Date: {{ employee.contract_end_date }}</p>
+        <p>Project: {{ employee.project }}</p>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -20,6 +23,14 @@
   import { useRoute } from 'vue-router'
   import { getEmployee } from '../services/employeeService.ts'
   import type { Employee } from '../models/Employee.ts'
+  import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from '@/core/components/ui/card'
 
   const route = useRoute()
   const employeeId = route.params.id as string
@@ -37,21 +48,3 @@
 
   onMounted(fetchEmployee)
 </script>
-
-<style scoped>
-  /* make the div look like a card */
-  div {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 1rem;
-    margin: 1rem;
-  }
-
-  @media (min-width: 768px) {
-    div {
-      width: 50%;
-      margin: 1rem auto;
-    }
-  }
-</style>
-

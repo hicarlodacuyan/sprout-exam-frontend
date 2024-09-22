@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <h1>Employee Dashboard</h1>
-    <div class="employees-container">
-      <router-link to="/add-employee" class="add-employee">Add Employee</router-link>
-      <div class="employee-list">
-        <ul>
+  <div class="m-4 flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl">Employee Dashboard</h1>
+      <Button type="button" variant="destructive" @click="logoutEmployee">
+        <LogOut />
+      </Button>
+    </div>
+    <div>
+      <div>
+        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           <li v-for="employee in employees" :key="employee.id">
             <EmployeeCard 
               :employee="employee"
@@ -13,8 +17,12 @@
           </li>
         </ul>
       </div>
-    <button @click="logoutEmployee">Logout</button>
-  </div>
+    </div>
+    <router-link to="/add-employee" class="fixed bottom-4 right-4">
+      <Button type="button" icon-only variant="primary" class="rounded-full w-14 h-14 flex items-center justify-center text-white bg-blue-500 hover:bg-blue-700">
+        <Plus />
+      </Button>
+    </router-link>
   </div>
 </template>
 
@@ -25,6 +33,8 @@
   import { logout } from '../../auth/services/authService.ts'
   import type { Employee } from '../models/Employee.ts'
   import EmployeeCard from '../components/EmployeeCard.vue'
+  import { Button } from '@/core/components/ui/button'
+  import { Trash, Plus, LogOut } from 'lucide-vue-next'
 
   const employees = ref<Employee[]>([])
   const router = useRouter()
@@ -45,54 +55,3 @@
   
   onMounted(fetchEmployees)
 </script>
-
-<style scoped>
-  div {
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-
-    padding: 1rem;
-  }
-
-  .employee-list {
-    flex: 1;
-
-    overflow-y: auto;
-  }
-
-  .add-employee {
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    align-self: flex-end;
-    text-decoration: none;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  button {
-    padding: 0.5rem;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    cursor: pointer;
-
-    align-self: flex-end;
-  }
-
-  @media (min-width: 768px) {
-    .employee-list ul {
-      display: flex;
-      gap: 1em;
-      flex-direction: row;
-    }
-  }
-</style>

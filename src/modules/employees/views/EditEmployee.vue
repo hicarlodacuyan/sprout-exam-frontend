@@ -1,40 +1,148 @@
 <template>
   <!-- Render form only when employee data is loaded -->
-  <div v-if="employee">
-    <h1>Edit Employee</h1>
-    <form @submit.prevent="onSubmit">
-      <div>
-        <label for="type_of_employee">Type of Employee:</label>
-        <select v-model="typeOfEmployee" id="type_of_employee" :disabled="true">
-          <option value="">Select Type</option>
-          <option value="regular">Regular</option>
-          <option value="contractual">Contractual</option>
-        </select>
-      </div>
+  <div class="m-4" v-if="employee">
+    <Card>
+      <CardHeader>
+        <CardTitle>Edit Employee</CardTitle>
+        <CardDescription>Modify the details of the employee</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form @submit="onSubmit" class="flex flex-col gap-4">
+          <!-- Employee Type (Disabled) -->
+          <FormField v-slot="{ componentField }" name="type_of_employee">
+            <FormItem>
+              <FormLabel for="type_of_employee">Type of Employee</FormLabel>
+              <FormControl>
+                <Select v-bind="componentField" v-model="form.values.type_of_employee" id="type_of_employee" :disabled="true">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Employee Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup label="Employee Type">
+                      <SelectItem value="regular">Regular</SelectItem>
+                      <SelectItem value="contractual">Contractual</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
 
-      <!-- Regular Employee Form -->
-      <div v-if="typeOfEmployee === 'regular'">
-        <input v-model="employee.first_name" placeholder="First Name" required />
-        <input v-model="employee.last_name" placeholder="Last Name" required />
-        <input v-model="employee.email" placeholder="Email" type="email" required />
-        <input v-model.number="employee.number_of_leaves" placeholder="Number of Leaves" type="number" required />
-        <input v-model="employee.benefits" placeholder="Benefits" required />
-      </div>
+          <!-- Regular Employee Form -->
+          <template v-if="form.values.type_of_employee === 'regular'">
+            <FormField v-slot="{ componentField }" name="first_name">
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="First Name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
 
-      <!-- Contractual Employee Form -->
-      <div v-if="typeOfEmployee === 'contractual'">
-        <input v-model="employee.first_name" placeholder="First Name" required />
-        <input v-model="employee.last_name" placeholder="Last Name" required />
-        <input v-model="employee.email" placeholder="Email" type="email" required />
-        <input v-model="employee.contract_end_date" placeholder="Contract End Date" type="date" required />
-        <input v-model="employee.project" placeholder="Project" required />
-      </div>
+            <FormField v-slot="{ componentField }" name="last_name">
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Last Name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
 
-      <button type="submit">Update Employee</button>
-    </form>
+            <FormField v-slot="{ componentField }" name="email">
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Email" type="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="number_of_leaves">
+              <FormItem>
+                <FormLabel>Number of Leaves</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" type="number" placeholder="Number of Leaves" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="benefits">
+              <FormItem>
+                <FormLabel>Benefits</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Benefits" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+          </template>
+
+          <!-- Contractual Employee Form -->
+          <template v-if="form.values.type_of_employee === 'contractual'">
+            <FormField v-slot="{ componentField }" name="first_name">
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="First Name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="last_name">
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Last Name" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="email">
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Email" type="email" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="contract_end_date">
+              <FormItem>
+                <FormLabel>Contract End Date</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" type="date" placeholder="Contract End Date" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+
+            <FormField v-slot="{ componentField }" name="project">
+              <FormItem>
+                <FormLabel>Project</FormLabel>
+                <FormControl>
+                  <Input v-bind="componentField" placeholder="Project" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+          </template>
+
+          <!-- Submit Button -->
+          <Button type="submit">Update Employee</Button>
+        </form>
+      </CardContent>
+    </Card>
   </div>
 
-  <!-- Show a loading message or spinner while fetching data -->
+  <!-- Loading state -->
   <div v-else>
     <p>Loading...</p>
   </div>
@@ -43,85 +151,88 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { useForm } from 'vee-validate'
+  import { toTypedSchema } from '@vee-validate/zod'
+  import * as z from 'zod'
   import { getEmployee, updateEmployee } from '../services/employeeService.ts'
-  import type { RegularEmployee, ContractualEmployee } from '../models/Employee.ts'
+  import { Button } from '@/core/components/ui/button'
+  import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription
+  } from '@/core/components/ui/card'
+  import {
+    FormItem,
+    FormField,
+    FormLabel,
+    FormControl,
+    FormMessage
+  } from '@/core/components/ui/form'
+  import { Input } from '@/core/components/ui/input'
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from '@/core/components/ui/select'
 
-  const route = useRoute()
+  // Zod schema for validation
+  const employeeSchema = toTypedSchema(z.object({
+    type_of_employee: z.enum(['regular', 'contractual']),
+    first_name: z.string().min(1, 'First Name is required'),
+    last_name: z.string().min(1, 'Last Name is required'),
+    email: z.string().email('Invalid email format'),
+    number_of_leaves: z.number().optional(),
+    benefits: z.string().optional(),
+    contract_end_date: z.string().optional(),
+    project: z.string().optional(),
+  }))
+
   const router = useRouter()
+  const route = useRoute()
+  const employee = ref(null)
 
-  const typeOfEmployee = ref<string>('')
-  const employee = ref<RegularEmployee | ContractualEmployee | null>(null)
+  const form = useForm({
+    validationSchema: employeeSchema,
+    initialValues: {
+      type_of_employee: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+      number_of_leaves: undefined,
+      benefits: '',
+      contract_end_date: '',
+      project: ''
+    }
+  })
 
   const fetchEmployee = async () => {
     const employeeId = route.params.id as string
     try {
       const data = await getEmployee(employeeId)
       employee.value = data
- 
-      if (data.number_of_leaves !== undefined) {
-        typeOfEmployee.value = 'regular'
-      } else if (data.contract_end_date !== undefined) {
-        typeOfEmployee.value = 'contractual'
-      }
+      form.setValues({
+        ...data,
+        type_of_employee: data.number_of_leaves !== undefined ? 'regular' : 'contractual',
+      })
     } catch (error) {
       console.error('Failed to fetch employee', error)
     }
   }
 
-  const onSubmit = async () => {
+  const onSubmit = form.handleSubmit(async (values) => {
     try {
-      await updateEmployee(employee.value!.id, typeOfEmployee.value, employee.value!)
+      await updateEmployee(route.params.id, values.type_of_employee, values)
       router.push('/dashboard')
     } catch (error) {
       console.error('Failed to update employee', error)
     }
-  }
+  })
 
   onMounted(fetchEmployee)
 </script>
-
-<style scoped>
-  div {
-    padding: 1rem;
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  input {
-    padding: 0.5rem;
-  }
-
-  select {
-    padding: 0.5rem;
-  }
-
-  button {
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-
-    @media (min-width: 768px) {
-    form {
-      width: 50%;
-      margin: 0 auto;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    form {
-      width: 30%;
-    }
-  }
-</style>
 

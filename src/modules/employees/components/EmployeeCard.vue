@@ -1,24 +1,32 @@
 <template>
-  <div class="employee-card">
-    <h3>{{ employee.first_name }} {{ employee.last_name }}</h3>
-    <p>Email: {{ employee.email }}</p>
-
-    <!-- Show additional fields based on employee type -->
-    <div v-if="employee.number_of_leaves !== undefined">
-      <p>Number of Leaves: {{ employee.number_of_leaves }}</p>
-      <p>Benefits: {{ employee.benefits }}</p>
-    </div>
-
-    <div v-if="employee.contract_end_date !== undefined">
-      <p>Contract End Date: {{ employee.contract_end_date }}</p>
-      <p>Project: {{ employee.project }}</p>
-    </div>
-
-    <div class="action-btns">
-      <button @click="viewEmployee" class="view-btn">View</button>
-      <button @click="editEmployee" class="edit-btn">Edit</button>
-      <button @click="deleteEmployeeHandler" class="delete-btn">Delete</button>
-    </div>
+  <div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{{ employee.first_name }} {{ employee.last_name }}</CardTitle>
+        <CardDescription>Email: {{ employee.email }}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div v-if="employee.number_of_leaves !== undefined">
+          <p>Number of Leaves: {{ employee.number_of_leaves }}</p>
+          <p>Benefits: {{ employee.benefits }}</p>
+        </div>
+        <div v-if="employee.contract_end_date !== undefined">
+          <p>Contract End Date: {{ employee.contract_end_date }}</p>
+          <p>Project: {{ employee.project }}</p>
+        </div>
+      </CardContent>
+      <CardFooter class="flex gap-4">
+        <Button type="button" variant="outline" @click="viewEmployee">
+          <Eye />
+        </Button>
+        <Button type="button" variant="outline" @click="editEmployee">
+          <Pencil />
+        </Button>
+        <Button type="button" variant="outline" @click="deleteEmployeeHandler">
+          <Trash />
+        </Button>
+      </CardFooter>
+    </Card>   
   </div>
 </template>
 
@@ -27,6 +35,16 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Employee } from '../models/Employee.ts'
 import { deleteEmployee } from '../services/employeeService.ts'
+import { Button } from '@/core/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/core/components/ui/card'
+import { Eye, Pencil, Trash } from 'lucide-vue-next';
 
 const props = defineProps<{
   employee: Employee
@@ -60,45 +78,3 @@ const deleteEmployeeHandler = async () => {
   }
 }
 </script>
-
-<style scoped>
-.employee-card {
-  border: 1px solid #ddd;
-  padding: 1em;
-  border-radius: 8px;
-  margin: 1em 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-}
-
-.action-btns {
-  display: flex;
-  gap: 1em;
-  justify-content: space-between;
-}
-
-button {
-  width: 100%;
-  padding: 0.5rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.view-btn {
-  background-color: #28a745;
-}
-
-.edit-btn {
-  background-color: #ffc107;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-}
-
-</style>
-

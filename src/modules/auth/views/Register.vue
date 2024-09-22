@@ -1,12 +1,35 @@
 <template>
-  <div>
-    <h1>Register</h1>
-    <form @submit.prevent="onRegister">
-      <input v-model="username" placeholder="Username" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <button type="submit">Register</button>
-      <router-link to="/login">Already have an account? Login here</router-link>
-    </form>
+  <div class="h-dvh flex justify-center items-center">
+    <Card>
+      <CardHeader>
+        <CardTitle>Register an account</CardTitle>
+        <CardDescription>Enter your credentials to register an account</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form @submit="onSubmit" class="flex flex-col gap-4">
+          <FormField v-slot="{ componentField }" name="username">
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input type="text" placeholder="Username" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField v-slot="{ componentField }" name="password">
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Password" v-bind="componentField" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <Button type="submit">Register</Button>
+          <router-link to="/login" class="self-center">Already have an account? Login here</router-link>
+        </form>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
@@ -14,60 +37,47 @@
 import { ref } from 'vue'
 import { register } from '../services/authService'
 import { useRouter } from 'vue-router'
+import { Button } from '@/core/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/core/components/ui/card'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import * as z from 'zod'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/core/components/ui/form'
+import { Input } from '@/core/components/ui/input'
 
-const username = ref('')
-const password = ref('')
+const formSchema = toTypedSchema(z.object({
+  username: z.string().min(3).max(20).nonempty(),
+  password: z.string().min(6).max(100).nonempty(),
+}))
+
+const form = useForm({
+  validationSchema: formSchema,
+})
+
 const router = useRouter()
 
-const onRegister = async () => {
+const onSubmit = form.handleSubmit(async (values) => {
+  const { username, password } = values
+
   try {
-    await register(username.value, password.value)
-    router.push('/login') 
+    await register(username, password)
+    router.push('/')
   } catch (error) {
     console.error('Registration failed', error)
   }
-}
+})
 </script>
-
-<style scoped>
-  div {
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    padding: 1rem;
-  }
-
-  input {
-    padding: 0.5rem;
-  }
-
-  button {
-    padding: 0.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-
-  @media (min-width: 768px) {
-    form {
-      width: 50%;
-      margin: 0 auto;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    form {
-      width: 30%;
-    }
-  }
-</style>
