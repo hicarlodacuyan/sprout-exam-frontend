@@ -65,7 +65,7 @@ npm run lint
 
 ### BONUS QUESTIONS: 
 
-If we are going to deploy this on production, what do you think is the next improvement that you will prioritize next?``````
+If we are going to deploy this on production, what do you think is the next improvement that you will prioritize next?
 
 ```
 - Add storybook for component documentation
@@ -138,4 +138,5 @@ If we are going to deploy this on production, what do you think is the next impr
 |-- shims-vue.d.ts
 ```
 
-Currently, the styling of the application is very basic. I would like to improve the styling of the application by adding a CSS library and framework like TailwindCSS or ShadCN. This will help in making the application more visually appealing and user-friendly. Additionally, I would also like to incorporate a design system to maintain consistency in the UI components and styles across the application. This will help in improving the overall user experience and branding of the application.
+I would also like to incorporate a design system to maintain consistency in the UI components and styles across the application. This will help in improving the overall user experience and branding of the application. Also, adding Storybook for components documentation and visual testing as well as Vitest for unit testing will help in ensuring the quality and stability of the codebase.
+
